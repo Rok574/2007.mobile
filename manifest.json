@@ -1,0 +1,20 @@
+{
+ "kernel": "fw/kernel_1A543a.macho",
+ "devicetree": "fw/devicetree_m68ap.bin",
+ "snapshot": [
+  "fw/home_1A543a.snap.gz.part0",
+  "fw/home_1A543a.snap.gz.part1"
+ ],
+ "assetSha256": {
+  "fw/kernel_1A543a.macho": "42e9f3c18d4a4d5c956acdcded0c3f8f247fe3e7fc96d14cfa3aedcd77c292c9",
+  "fw/devicetree_m68ap.bin": "94cbef8175df0d84afbbd3885f7fe7267b9e6f4ba3b80f8d83328800cff93e10",
+  "fw/home_1A543a.snap.gz.part0": "4909d8a11bd3c9075cd94e68245423f107cd9ba104b000af9e48694ea2157a2e",
+  "fw/home_1A543a.snap.gz.part1": "177a9a0c521a1f4f926a9aa683c49189f9cd327e1de869060fa7501bed9095b6"
+ },
+ "assetBytes": {
+  "fw/kernel_1A543a.macho": 5888896,
+  "fw/devicetree_m68ap.bin": 36864,
+  "fw/home_1A543a.snap.gz.part0": 50201156,
+  "fw/home_1A543a.snap.gz.part1": 50201155
+ }
+}

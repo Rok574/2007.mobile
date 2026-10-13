@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pocket 2007 — an alternate front end for 2007.mobile</title>
+<style>
+:root{--bg:#f3f1ee;--ink:#1c1b1a;--muted:#6b6862;--card:#fff;--line:#e2ded8;--accent:#0a73e0;--b1:#e4e5e8;--b2:#a9abb1;--glow:#cfe3ff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0f13;--ink:#ecebe8;--muted:#9a978f;--card:#161a21;--line:#262b35;--accent:#4da3ff;--b1:#3a3e47;--b2:#1b1d22;--glow:#16304f}}
+:root[data-theme="dark"]{--bg:#0d0f13;--ink:#ecebe8;--muted:#9a978f;--card:#161a21;--line:#262b35;--accent:#4da3ff;--b1:#3a3e47;--b2:#1b1d22;--glow:#16304f}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(60rem 40rem at 30% 10%,var(--glow),transparent 60%),var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;min-height:100vh}
+.experience{max-width:980px;margin:0 auto;padding:32px 20px 24px;display:grid;gap:40px;grid-template-columns:auto 1fr;align-items:center}
+@media(max-width:820px){.experience{grid-template-columns:1fr;justify-items:center}}
+.device-stage{display:flex;justify-content:center;max-width:100%}
+.phone{position:relative;width:360px;max-width:100%;padding:70px 20px 96px;border-radius:54px;background:linear-gradient(150deg,var(--b1),var(--b2));box-shadow:0 30px 60px -20px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.18)}
+.earpiece{position:absolute;top:32px;left:50%;width:64px;height:7px;margin-left:-32px;border-radius:4px;background:#0006}
+.display-recess{position:relative;background:#000;border-radius:6px;overflow:hidden;aspect-ratio:2/3;box-shadow:0 0 0 3px #000}
+#screen{display:block;width:100%;height:100%;touch-action:none;background:#000}
+.boot-loader{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#000;color:#bbb;font-size:13px}
+.boot-logo{width:56px;fill:#fff}
+.boot-meter{display:flex;align-items:center;gap:10px}
+.boot-progress{width:140px;height:5px;border-radius:3px;background:#333;overflow:hidden}
+.boot-progress span{display:block;height:100%;width:100%;background:#fff;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.physical{position:absolute;border:0;padding:0;cursor:pointer;background:linear-gradient(90deg,#8d8f95,#d6d7da);border-radius:3px}
+.physical:disabled{cursor:default;opacity:.8}
+.power{top:-4px;right:70px;width:56px;height:8px}
+.ringer{left:-4px;top:110px;width:8px;height:26px}
+.volume-up{left:-4px;top:160px;width:8px;height:44px}
+.volume-down{left:-4px;top:212px;width:8px;height:44px}
+.home{left:50%;bottom:20px;width:58px;height:58px;margin-left:-29px;border-radius:50%;background:#15171b;box-shadow:inset 0 0 0 2px #4b4e56}
+.home-symbol{display:block;width:20px;height:20px;margin:auto;border:2px solid #9a9da6;border-radius:5px}
+.physical.pressed{filter:brightness(.7)}
+.boot-loader[data-state="error"]{color:#ff8a80}
+#update-notice{font-size:13px;color:var(--accent);margin:0 0 12px}
+.companion h1{font-size:clamp(2rem,5vw,3rem);line-height:1.05;margin:0 0 8px;letter-spacing:-.02em}
+.companion .lede{color:var(--muted);margin:0 0 20px;max-width:34ch}
+#status{margin:0 0 14px;font-size:14px;color:var(--muted)}
+.session-controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.text-button{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.text-button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.text-button:disabled{opacity:.45;cursor:default}
+.import-control input{display:none}
+.help-panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.help-panel summary{cursor:pointer;font-weight:600}
+.shortcuts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.shortcuts div{background:var(--bg);border-radius:10px;padding:8px 10px}
+.shortcuts dd{margin:2px 0 0;color:var(--muted);font-size:13px}
+kbd{font:12px ui-monospace,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--card)}
+.help-content p{font-size:14px;color:var(--muted);margin:8px 0}
+pre{overflow-x:auto;max-width:100%;font-size:12px}
+.developer-panel{overflow-x:auto}
+.credit{max-width:980px;margin:0 auto;padding:8px 20px 32px;font-size:13px;color:var(--muted);text-align:center}
+.credit a{color:var(--accent)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="experience">
+  <section class="device-stage" aria-label="Original iPhone emulator">
+    <div class="phone">
+      <div class="earpiece" aria-hidden="true"></div>
+      <button class="physical power" data-button="0" aria-label="Sleep or wake iPhone" title="Sleep / wake (P)" disabled></button>
+      <button class="physical ringer" data-button="4" data-toggle aria-pressed="false" aria-label="Silent mode" title="Silent mode (M)" disabled></button>
+      <button class="physical volume volume-up" data-button="2" aria-label="Volume up" title="Volume up (+)" disabled></button>
+      <button class="physical volume volume-down" data-button="3" aria-label="Volume down" title="Volume down (−)" disabled></button>
+      <div class="display-recess">
+        <canvas id="screen" width="320" height="480" aria-label="iPhone display. Tap and drag to interact."></canvas>
+        <div id="boot-loader" class="boot-loader" role="status" aria-live="polite">
+          <svg class="boot-logo" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="0"/><rect x="7" y="2" width="10" height="20" rx="2.5" fill="#fff"/></svg>
+          <div class="boot-meter">
+            <div id="progress" class="boot-progress" role="progressbar" aria-label="Loading iPhone" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+            <span id="boot-percent" aria-hidden="true">0%</span>
+          </div>
+          <span id="boot-label">Waiting for the emulator core…</span>
+          <div class="boot-recovery">
+            <button id="retry" class="text-button" hidden disabled>Try again</button>
+            <button id="recover" class="text-button" hidden disabled>Restore previous save</button>
+          </div>
+        </div>
+      </div>
+      <button class="physical home" data-button="1" aria-label="Home" title="Home (Esc or H)" disabled><span class="home-symbol" aria-hidden="true"></span></button>
+    </div>
+  </section>
+
+  <section class="companion" aria-label="Emulator controls">
+    <h1>Pocket 2007</h1>
+    <p class="lede">The first iPhone, in a new coat of paint. Slide to unlock and poke around iPhone OS 1.0.</p>
+    <p id="status" role="status" aria-live="polite">Preparing your iPhone…</p>
+    <div id="controls" class="session-controls" aria-label="Saved phone controls">
+      <button id="pause" class="text-button" disabled>Pause</button>
+      <button id="save" class="text-button" disabled>Save</button>
+      <button id="export" class="text-button" disabled>Export</button>
+      <label class="text-button import-control" for="import">Import<input id="import" type="file" accept=".snap,.gz,.iphone,application/octet-stream,application/gzip" disabled></label>
+      <button id="reset" class="text-button" disabled>Reset</button>
+      <button id="offline" class="text-button" disabled>Keep offline</button>
+    </div>
+    <details id="help" class="help-panel">
+      <summary>Getting around</summary>
+      <div class="help-content">
+        <dl class="shortcuts">
+          <div><dt><kbd>Esc</kbd> / <kbd>H</kbd></dt><dd>Home</dd></div>
+          <div><dt><kbd>P</kbd></dt><dd>Sleep / wake</dd></div>
+          <div><dt><kbd>+</kbd> / <kbd>−</kbd></dt><dd>Volume</dd></div>
+          <div><dt><kbd>M</kbd></dt><dd>Silent mode</dd></div>
+        </dl>
+        <p>Save keeps a checkpoint in this browser. Export downloads a backup; Import restores one. Browser storage can be cleared, so export anything you want to keep.</p>
+        <details class="developer-panel"><summary>Diagnostics</summary><pre id="diagnostics" tabindex="0">Waiting for the emulator…</pre></details>
+      </div>
+    </details>
+  </section>
+</main>
+<p class="credit">Unofficial alternate front end. Original site, concept and emulator: <a href="https://2007.mobile/" rel="noopener">2007.mobile</a>. Shown here with its own credit and no affiliation with Apple.</p>
+<script type="module" src="app.js"></script>
+</body>
+</html>
